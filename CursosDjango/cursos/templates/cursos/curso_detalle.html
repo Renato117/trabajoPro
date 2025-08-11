@@ -1,0 +1,128 @@
+{% extends 'contenido/base.html' %}
+
+{% block extra_head %}
+<style>
+  body {
+    background-color: #f4f4f4;
+  }
+
+  .card-detalle {
+    max-width: 420px;
+    margin: 3rem auto;
+    background-color: #fff;
+    border-radius: 1.2rem;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    font-family: 'Segoe UI', sans-serif;
+    text-align: center;
+    padding: 1.5rem;
+  }
+
+  .card-imagen {
+    width: 120px;
+    height: 120px;
+    margin: 0 auto 1rem auto;
+    border-radius: 1rem;
+    overflow: hidden;
+    border: 4px solid #e0e0e0;
+    background-color: #fafafa;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .card-imagen img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .card-titulo {
+    font-size: 1.6rem;
+    font-weight: 600;
+    color: #0d6efd;
+    margin-bottom: 1rem;
+  }
+
+  .card-info {
+    text-align: left;
+    font-size: 0.95rem;
+    color: #444;
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+  }
+
+  .card-info p {
+    margin-bottom: 0.5rem;
+  }
+
+  .card-info strong {
+    color: #000;
+  }
+
+  .card-botones {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .btn-editar, .btn-eliminar {
+    padding: 0.45rem 1rem;
+    font-size: 0.9rem;
+    border-radius: 8px;
+    transition: all 0.3s ease-in-out;
+  }
+
+  .btn-editar {
+    color: #0d6efd;
+    border: 1px solid #0d6efd;
+  }
+
+  .btn-editar:hover {
+    background-color: #0d6efd;
+    color: white;
+  }
+
+  .btn-eliminar {
+    color: #dc3545;
+    border: 1px solid #dc3545;
+  }
+
+  .btn-eliminar:hover {
+    background-color: #dc3545;
+    color: white;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="card-detalle">
+  <div class="card-imagen">
+    {% if curso.imagen %}
+      <img src="{{ curso.imagen.url }}" alt="{{ curso.titulo }}">
+    {% else %}
+      <span style="color:#bbb; font-size: 0.85rem;">Sin imagen</span>
+    {% endif %}
+  </div>
+
+  <div class="card-titulo">{{ curso.titulo }}</div>
+
+  <div class="card-info">
+    <p><strong>Descripción:</strong> {{ curso.descripcion|linebreaksbr }}</p>
+    <p><strong>Duración:</strong> {{ curso.duracion }} horas</p>
+    <p><strong>Precio:</strong> ${{ curso.precio }}</p>
+    <p><strong>Nivel:</strong> {{ curso.get_nivel_display }}</p>
+    <p><strong>Publicado en:</strong> {{ curso.fecha_creado|date:"d M Y H:i" }}</p>
+  </div>
+
+  <div class="card-botones">
+    <a href="{% url 'cursos:editar' curso.pk %}" class="btn btn-outline-primary btn-editar">
+      <i class="fas fa-edit me-1"></i> Editar
+    </a>
+    <a href="{% url 'cursos:eliminar' curso.pk %}" class="btn btn-outline-danger btn-eliminar">
+      <i class="fas fa-trash me-1"></i> Eliminar
+    </a>
+  </div>
+</div>
+{% endblock %}

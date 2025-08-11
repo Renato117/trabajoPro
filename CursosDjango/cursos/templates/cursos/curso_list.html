@@ -1,0 +1,198 @@
+{% extends 'contenido/base.html' %}
+{% block title %}Cursos - CursosDjango{% endblock %}
+
+{% block content %}
+<section class="container py-5" style="font-family: 'Helvetica Neue', Arial, sans-serif;">
+
+  <header class="d-flex flex-column flex-md-row justify-content-between align-items-center mb-5 border-bottom pb-3">
+    <h2 style="font-weight: 800; color: #222; font-size: 2rem; letter-spacing: 0.1em;">Catálogo de Cursos</h2>
+    <a href="{% url 'cursos:nuevo' %}" style="
+      background-color: #27ae60;
+      color: #fff;
+      padding: 0.6rem 1.3rem;
+      border-radius: 8px;
+      font-weight: 700;
+      text-transform: uppercase;
+      font-size: 0.85rem;
+      text-decoration: none;
+      box-shadow: 0 4px 8px rgba(39, 174, 96, 0.3);
+      transition: background-color 0.25s ease;
+    "
+    onmouseover="this.style.backgroundColor='#219150';"
+    onmouseout="this.style.backgroundColor='#27ae60';"
+    >
+      + Añadir nuevo
+    </a>
+  </header>
+
+  <div class="row gy-4">
+    {% for curso in cursos %}
+      <div class="col-12 col-sm-6 col-lg-4">
+        <section style="
+          border: 1px solid #ccc;
+          border-radius: 12px;
+          overflow: hidden;
+          display: flex;
+          flex-direction: column;
+          height: 100%;
+          background: #fafafa;
+          box-shadow: 0 3px 6px rgba(0,0,0,0.05);
+          transition: box-shadow 0.3s ease;
+        "
+        onmouseover="this.style.boxShadow='0 8px 20px rgba(0,0,0,0.12)';"
+        onmouseout="this.style.boxShadow='0 3px 6px rgba(0,0,0,0.05)';"
+        >
+
+          {% if curso.imagen %}
+            <div style="height: 140px; overflow: hidden;">
+              <img src="{{ curso.imagen.url }}" alt="{{ curso.titulo }}" style="width: 100%; height: 140px; object-fit: cover;">
+            </div>
+          {% else %}
+            <div style="
+              height: 140px;
+              background-color: #ddd;
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              color: #888;
+              font-weight: 600;
+              font-size: 1rem;
+            ">
+              Imagen no disponible
+            </div>
+          {% endif %}
+
+          <div style="padding: 1rem; flex-grow: 1; display: flex; flex-direction: column;">
+            <h3 style="margin-bottom: 0.5rem; color: #2c3e50; font-weight: 700;">{{ curso.titulo }}</h3>
+            <p style="flex-grow: 1; color: #555; font-size: 0.9rem; margin-bottom: 1rem;">
+              {{ curso.descripcion|truncatewords:12 }}
+            </p>
+
+            <dl style="display: flex; flex-wrap: wrap; gap: 1rem; font-size: 0.85rem; color: #666; margin-bottom: 1rem;">
+              <div><strong>⌛</strong> {{ curso.duracion }} horas</div>
+              <div><strong>💲</strong> ${{ curso.precio }}</div>
+              <div><strong>🎯</strong> {{ curso.get_nivel_display }}</div>
+            </dl>
+
+            <nav style="margin-top: auto; display: flex; justify-content: space-between; gap: 0.5rem;">
+              <a href="{% url 'cursos:detalle' curso.pk %}" style="
+                background-color: #2980b9;
+                color: white;
+                padding: 0.45rem 1rem;
+                border-radius: 6px;
+                font-weight: 600;
+                font-size: 0.9rem;
+                text-decoration: none;
+                flex-grow: 1;
+                text-align: center;
+                transition: background-color 0.3s ease;
+              "
+              onmouseover="this.style.backgroundColor='#1c5980';"
+              onmouseout="this.style.backgroundColor='#2980b9';"
+              >Detalles</a>
+
+              <a href="{% url 'cursos:editar' curso.pk %}" title="Editar" style="
+                background-color: #f39c12;
+                color: white;
+                padding: 0.45rem 0.8rem;
+                border-radius: 6px;
+                font-weight: 700;
+                font-size: 1rem;
+                text-decoration: none;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                width: 40px;
+                transition: background-color 0.3s ease;
+              "
+              onmouseover="this.style.backgroundColor='#d68910';"
+              onmouseout="this.style.backgroundColor='#f39c12';"
+              >✎</a>
+
+              <a href="{% url 'cursos:eliminar' curso.pk %}" title="Eliminar" style="
+                background-color: #e74c3c;
+                color: white;
+                padding: 0.45rem 0.8rem;
+                border-radius: 6px;
+                font-weight: 700;
+                font-size: 1rem;
+                text-decoration: none;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                width: 40px;
+                transition: background-color 0.3s ease;
+              "
+              onmouseover="this.style.backgroundColor='#c0392b';"
+              onmouseout="this.style.backgroundColor='#e74c3c';"
+              >🗑</a>
+            </nav>
+          </div>
+        </section>
+      </div>
+    {% empty %}
+      <div class="col-12">
+        <p style="text-align: center; color: #999; font-size: 1.2rem;">No hay cursos registrados aún.</p>
+      </div>
+    {% endfor %}
+  </div>
+
+  {% if is_paginated %}
+    <nav aria-label="Paginación de cursos" style="margin-top: 3rem; display: flex; justify-content: center; gap: 8px; flex-wrap: wrap;">
+      {% if page_obj.has_previous %}
+        <a href="?page={{ page_obj.previous_page_number }}" style="
+          padding: 0.4rem 0.9rem;
+          border: 1px solid #aaa;
+          border-radius: 5px;
+          color: #444;
+          text-decoration: none;
+          font-weight: 600;
+          user-select: none;
+          transition: background-color 0.25s ease;
+        "
+        onmouseover="this.style.backgroundColor='#ddd';"
+        onmouseout="this.style.backgroundColor='transparent';"
+        >← Anterior</a>
+      {% endif %}
+
+      {% for num in paginator.page_range %}
+        <a href="?page={{ num }}" style="
+          padding: 0.4rem 0.9rem;
+          border-radius: 5px;
+          font-weight: 600;
+          text-decoration: none;
+          user-select: none;
+          {% if page_obj.number == num %}
+            background-color: #27ae60;
+            color: white;
+            border: 1px solid #27ae60;
+          {% else %}
+            color: #444;
+            border: 1px solid transparent;
+          {% endif %}
+          transition: background-color 0.3s ease;
+        ">
+          {{ num }}
+        </a>
+      {% endfor %}
+
+      {% if page_obj.has_next %}
+        <a href="?page={{ page_obj.next_page_number }}" style="
+          padding: 0.4rem 0.9rem;
+          border: 1px solid #aaa;
+          border-radius: 5px;
+          color: #444;
+          text-decoration: none;
+          font-weight: 600;
+          user-select: none;
+          transition: background-color 0.25s ease;
+        "
+        onmouseover="this.style.backgroundColor='#ddd';"
+        onmouseout="this.style.backgroundColor='transparent';"
+        >Siguiente →</a>
+      {% endif %}
+    </nav>
+  {% endif %}
+
+</section>
+{% endblock %}

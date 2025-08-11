@@ -1,0 +1,76 @@
+{% extends 'contenido/base.html' %}
+{% load static %}
+{% block title %}Contacto - CursosDjango{% endblock %}
+
+{% block content %}
+<section style="
+  background: linear-gradient(135deg, #f0f4ff 0%, #d9e4ff 100%);
+  min-height: 80vh;
+  padding: 4rem 0;
+  display: flex;
+  align-items: center;
+  font-family: 'Roboto', sans-serif;
+">
+  <div class="container" style="max-width: 600px; margin: 0 auto; background: #fff; border-radius: 12px; box-shadow: 0 8px 20px rgb(0 0 0 / 0.1); padding: 3rem;">
+    <h2 style="color: #0d6efd; font-weight: 700; margin-bottom: 2rem; text-align: center;">Contáctanos</h2>
+
+    {% if messages %}
+      {% for msg in messages %}
+        <div class="alert alert-{{ msg.tags }} mt-3">{{ msg }}</div>
+      {% endfor %}
+    {% endif %}
+
+    <form method="post" action="" novalidate>
+      {% csrf_token %}
+
+      <div class="mb-4">
+        <label for="id_nombre" class="form-label fw-semibold" style="color:#333;">Nombre</label>
+        <input type="text" id="id_nombre" name="nombre" required
+               class="form-control" placeholder="Tu nombre completo" style="border-radius: 8px;">
+        <div class="invalid-feedback">Por favor ingresa tu nombre.</div>
+      </div>
+
+      <div class="mb-4">
+        <label for="id_correo" class="form-label fw-semibold" style="color:#333;">Correo electrónico</label>
+        <input type="email" id="id_correo" name="correo" required
+               class="form-control" placeholder="ejemplo@correo.com" style="border-radius: 8px;">
+        <div class="invalid-feedback">Por favor ingresa un correo válido.</div>
+      </div>
+
+      <div class="mb-4">
+        <label for="id_asunto" class="form-label fw-semibold" style="color:#333;">Asunto</label>
+        <input type="text" id="id_asunto" name="asunto"
+               class="form-control" placeholder="Motivo del mensaje (opcional)" style="border-radius: 8px;">
+      </div>
+
+      <div class="mb-4">
+        <label for="id_mensaje" class="form-label fw-semibold" style="color:#333;">Mensaje</label>
+        <textarea id="id_mensaje" name="mensaje" rows="5" required
+                  class="form-control" placeholder="Escribe aquí tu mensaje..." style="border-radius: 8px;"></textarea>
+        <div class="invalid-feedback">Escribe tu mensaje.</div>
+      </div>
+
+      <button type="submit" class="btn btn-primary w-100 fw-bold" style="font-size: 1.1rem; padding: 0.75rem;">Enviar Mensaje</button>
+    </form>
+
+    <p style="text-align:center; margin-top: 2rem; color: #555; font-size: 0.9rem;">
+      Responderemos a tu correo a la brevedad posible. ¡Gracias por contactarnos!
+    </p>
+  </div>
+</section>
+
+<script>
+// Validación simple con Bootstrap 5
+(() => {
+  'use strict';
+  const form = document.querySelector('form');
+  form.addEventListener('submit', e => {
+    if (!form.checkValidity()) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+    form.classList.add('was-validated');
+  }, false);
+})();
+</script>
+{% endblock %}

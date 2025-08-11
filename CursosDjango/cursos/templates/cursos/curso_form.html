@@ -1,0 +1,171 @@
+{% extends 'contenido/base.html' %}
+{% load widget_tweaks %}
+
+{% block title %}
+  {% if form.instance.pk %}Editar{% else %}Nuevo{% endif %} Curso – CursosDjango
+{% endblock %}
+
+{% block extra_head %}
+<style>
+  .form-wrapper {
+    max-width: 600px;
+    margin: 3rem auto;
+    background-color: #fff;
+    border-radius: 16px;
+    padding: 2rem;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+  }
+
+  .form-wrapper h1 {
+    font-size: 1.6rem;
+    font-weight: 600;
+    color: #0d6efd;
+    margin-bottom: 1.5rem;
+    text-align: center;
+  }
+
+  .form-label {
+    font-weight: 600;
+    margin-bottom: 0.3rem;
+    color: #333;
+  }
+
+  .form-control,
+  .form-select {
+    border-radius: 8px;
+    padding: 0.5rem 0.75rem;
+    border: 1px solid #ccc;
+    transition: border-color 0.3s, box-shadow 0.3s;
+  }
+
+  .form-control:focus,
+  .form-select:focus {
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 0.2rem rgba(13,110,253,.25);
+    outline: none;
+  }
+
+  .help-text {
+    color: #6c757d;
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+    margin-bottom: 1rem;
+  }
+
+  .error-text {
+    color: #dc3545;
+    font-weight: 500;
+    font-size: 0.9rem;
+    margin-top: 0.25rem;
+  }
+
+  .polaroid-img {
+    max-width: 320px;
+    background: white;
+    padding: 12px 12px 32px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    margin: 0 auto 2rem;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+    text-align: center;
+  }
+
+  .polaroid-img img {
+    width: 100%;
+    border-radius: 6px;
+    display: block;
+  }
+
+  .btn-group {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 2rem;
+  }
+
+  .btn-save {
+    background-color: #0d6efd;
+    color: #fff;
+    font-weight: 600;
+    padding: 0.5rem 1.5rem;
+    border-radius: 10px;
+    border: none;
+    transition: background-color 0.3s;
+  }
+
+  .btn-save:hover {
+    background-color: #0b5ed7;
+  }
+
+  .btn-cancel {
+    background-color: #f8f9fa;
+    color: #212529;
+    border: 1px solid #ced4da;
+    font-weight: 500;
+    border-radius: 10px;
+    padding: 0.5rem 1.5rem;
+  }
+
+  .btn-cancel:hover {
+    background-color: #e2e6ea;
+  }
+
+  .btn-return {
+    display: inline-block;
+    margin: 0 auto 1.5rem;
+    padding: 0.4rem 1rem;
+    background-color: #6c757d;
+    color: white;
+    border-radius: 8px;
+    text-align: center;
+    font-size: 0.9rem;
+    text-decoration: none;
+  }
+
+  .btn-return:hover {
+    background-color: #5a6268;
+    text-decoration: none;
+    color: white;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="form-wrapper">
+
+  {% if form.instance.imagen %}
+  <div class="polaroid-img">
+    <img src="{{ form.instance.imagen.url }}" alt="Imagen actual del curso">
+  </div>
+  {% endif %}
+
+  <h1>{% if form.instance.pk %}Editar{% else %}Nuevo{% endif %} Curso</h1>
+
+  <div style="text-align:center;">
+   <a href="{% url 'cursos:lista' %}" class="btn-back">← Regresar a la lista de cursos</a>
+  </div>
+
+  <form method="post" enctype="multipart/form-data" novalidate>
+    {% csrf_token %}
+    {{ form.media }}
+
+    {% for field in form %}
+      <div class="mb-3">
+        <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}{% if field.field.required %} *{% endif %}</label>
+        {{ field|add_class:"form-control" }}
+        {% if field.help_text %}
+          <div class="help-text">{{ field.help_text }}</div>
+        {% endif %}
+        {% for error in field.errors %}
+          <div class="error-text">{{ error }}</div>
+        {% endfor %}
+      </div>
+    {% endfor %}
+
+    <div class="btn-group">
+      <button type="submit" class="btn-save">Guardar</button>
+      <a href="{% url 'cursos:lista' %}" class="btn-cancel">Cancelar</a>
+    </div>
+  </form>
+</div>
+{% endblock %}

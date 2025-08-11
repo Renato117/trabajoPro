@@ -1,0 +1,106 @@
+{% extends "admin/base.html" %}
+{% load static %}
+
+{% block title %}Panel Administrador | Panel de Administración{% endblock %}
+
+{% block extrahead %}
+  {{ block.super }}
+  <!-- Fuente Roboto para profesionalismo -->
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet" />
+  <style>
+    /* Ocultar barra de usuario original */
+    #user-tools {
+      display: none !important;
+    }
+
+    /* Encabezado */
+    #header {
+      background: #121212; /* casi negro */
+      border-bottom: 3px solid #0d6efd; /* azul bootstrap */
+      height: 60px;
+      position: relative;
+      box-shadow: 0 2px 6px rgba(13, 110, 253, 0.3);
+    }
+
+    /* Cabecera personalizada */
+    #custom-header {
+      display: flex;
+      align-items: center;
+      height: 60px;
+      padding: 0 1rem;
+      font-family: 'Roboto', sans-serif;
+      font-weight: 700;
+    }
+
+    .custom-logo {
+      display: inline-flex;
+      align-items: center;
+      text-decoration: none;
+    }
+
+    .custom-logo img {
+      height: 32px;
+      margin-right: 0.5rem;
+      filter: none;
+    }
+
+    .site-name {
+      color: #ffffff;
+      font-size: 1.3rem;
+      letter-spacing: 0.03em;
+    }
+
+    /* Herramientas de usuario */
+    .custom-user-tools {
+      position: absolute;
+      right: 1rem;
+      top: 0;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      font-family: 'Roboto', sans-serif;
+      font-size: 0.9rem;
+      gap: 1rem;
+      color: #ddd;
+    }
+
+    .custom-user-tools a,
+    .custom-user-tools .welcome {
+      color: #0d6efd;
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+
+    .custom-user-tools a:hover {
+      color: #0a58ca;
+      text-decoration: underline;
+    }
+
+    /* Fondo general */
+    body {
+      background: #121212;
+      color: #eee;
+      font-family: 'Roboto', sans-serif;
+    }
+  </style>
+{% endblock %}
+
+{% block branding %}
+  <div id="custom-header">
+    <a class="custom-logo" href="{% url 'admin:index' %}">
+      <img src="{% static 'images/admin.jpg' %}" alt="Panel Administrador" />
+      <span class="site-name">Panel Administrador</span>
+    </a>
+  </div>
+{% endblock %}
+
+{% block nav-global %}
+  <div class="custom-user-tools">
+    <span class="welcome">Bienvenido, {{ user.get_username }}.</span>
+    <a href="{% url 'Principal' %}">Ver el sitio</a>
+    <span>|</span>
+    <a href="{% url 'admin:password_change' %}">Cambiar contraseña</a>
+    <span>|</span>
+    <a href="{% url 'admin:logout' %}">Cerrar sesión</a>
+  </div>
+{% endblock %}
